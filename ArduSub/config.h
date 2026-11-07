@@ -228,3 +228,5 @@
 # define FLIGHT_MODE_6 Mode::Number::SURFACE
 #endif
 
+
+#define USERHOOK_SUPERSLOWLOOP

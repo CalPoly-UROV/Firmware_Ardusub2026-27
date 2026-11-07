@@ -61,6 +61,9 @@ private:
     MAV_RESULT handle_MAV_CMD_NAV_LOITER_UNLIM(const mavlink_command_int_t &packet);
     MAV_RESULT handle_MAV_CMD_NAV_LAND(const mavlink_command_int_t &packet);
 
+    MAV_RESULT handle_MAV_CMD_UROV_TEST(const mavlink_command_int_t &packet);
+    MAV_RESULT handle_MAV_CMD_UROV_TEST2(const mavlink_command_int_t &packet);
+
 #if AP_RANGEFINDER_ENABLED
     // send WATER_DEPTH - metres and temperature
     void send_water_depth();

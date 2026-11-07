@@ -463,9 +463,26 @@ MAV_RESULT GCS_MAVLINK_Sub::handle_command_int_packet(const mavlink_command_int_
     case MAV_CMD_NAV_LAND:
         return handle_MAV_CMD_NAV_LAND(packet);
 
+    case  7001:
+        return handle_MAV_CMD_UROV_TEST(packet);
+
+    case  7002:
+        return handle_MAV_CMD_UROV_TEST2(packet);
     }
 
     return GCS_MAVLINK::handle_command_int_packet(packet, msg);
+}
+
+MAV_RESULT GCS_MAVLINK_Sub::handle_MAV_CMD_UROV_TEST(const mavlink_command_int_t &packet)
+{
+        gcs().send_text(MAV_SEVERITY_INFO, "AYYYYYYYYYYYY");
+        return MAV_RESULT_ACCEPTED;
+}
+
+MAV_RESULT GCS_MAVLINK_Sub::handle_MAV_CMD_UROV_TEST2(const mavlink_command_int_t &packet)
+{
+        gcs().send_text(MAV_SEVERITY_INFO, "NAAAAHHHHHHHHHHHHHHH");
+        return MAV_RESULT_ACCEPTED;
 }
 
 MAV_RESULT GCS_MAVLINK_Sub::handle_MAV_CMD_NAV_LOITER_UNLIM(const mavlink_command_int_t &packet)
