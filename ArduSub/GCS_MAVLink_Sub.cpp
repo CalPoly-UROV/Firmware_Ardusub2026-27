@@ -434,6 +434,8 @@ MAV_RESULT GCS_MAVLINK_Sub::handle_command_int_do_reposition(const mavlink_comma
     return MAV_RESULT_ACCEPTED;
 }
 
+//Want this to return data value whenever using master.mav.command_int_send
+//Determine whether constant looping(polling) or running whole process each time command is sent is better for performance 
 MAV_RESULT GCS_MAVLINK_Sub::handle_command_int_packet(const mavlink_command_int_t &packet, const mavlink_message_t &msg)
 {
     switch(packet.command) {
@@ -474,8 +476,40 @@ MAV_RESULT GCS_MAVLINK_Sub::handle_command_int_packet(const mavlink_command_int_
 }
 
 MAV_RESULT GCS_MAVLINK_Sub::handle_MAV_CMD_UROV_TEST(const mavlink_command_int_t &packet)
-{
-        gcs().send_text(MAV_SEVERITY_INFO, "AYYYYYYYYYYYY");
+{   
+    WITH_SEMAPHORE(temp1->get_semaphore());
+
+    // put your 100Hz code here
+    uint8_t temp_reg = 0xfk;
+    uint8_t temp_val[4] = 0; // Yo if temp is ever zero that heat sink is magic
+    uint8_t current_reg = 0x0f;
+    uint8_t current_val[4] = 0;
+    
+    if (temp1->transfer(&temp_reg, 1, &temp_val[0], 1)) {
+        gcs().send_text(MAV_SEVERITY_INFO, "HEX: 0x%02X  -  DECIMAL: %u", temp_val[0], temp_val[0]);
+    }
+    if (temp2->transfer(&temp_reg, 1, &temp_val[1], 1)) {
+        gcs().send_text(MAV_SEVERITY_INFO, "HEX: 0x%02X  -  DECIMAL: %u", temp_val[1], temp_val[1]);
+    }
+    if (temp3->transfer(&temp_reg, 1, &temp_val[2], 1)) {
+        gcs().send_text(MAV_SEVERITY_INFO, "HEX: 0x%02X  -  DECIMAL: %u", temp_val[2], temp_val[2]);
+    }
+    if (temp4->transfer(&temp_reg, 1, &temp_val[3], 1)) {
+        gcs().send_text(MAV_SEVERITY_INFO, "HEX: 0x%02X  -  DECIMAL: %u", temp_val[3], temp_val[3]);
+    }
+    
+    if (current1->transfer(&current_reg, 1, &current_val[0], 1)) {
+        gcs().send_text(MAV_SEVERITY_INFO, "HEX: 0x%02X  -  DECIMAL: %u", current_val[0], current_val[0]);
+    }
+    if (current2->transfer(&current_reg, 1, &current_val[1], 1)) {
+        gcs().send_text(MAV_SEVERITY_INFO, "HEX: 0x%02X  -  DECIMAL: %u", current_val[1], current_val[1]);
+    }
+    if (current3->transfer(&current_reg, 1, &current_val[2], 1)) {
+        gcs().send_text(MAV_SEVERITY_INFO, "HEX: 0x%02X  -  DECIMAL: %u", current_val[2], current_val[2]);
+    }
+    if (current4->transfer(&current_reg, 1, &current_val[3], 1)) {
+        gcs().send_text(MAV_SEVERITY_INFO, "HEX: 0x%02X  -  DECIMAL: %u", current_val[3], current_val[3]);
+    }
         return MAV_RESULT_ACCEPTED;
 }
 
